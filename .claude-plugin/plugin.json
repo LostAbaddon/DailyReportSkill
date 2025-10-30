@@ -1,0 +1,30 @@
+{
+  "name": "daily-report",
+  "version": "1.0.0",
+  "description": "自动记录用户活动，并能根据用户活动生成日报周报。同时也是 CCCore 的 Plugin 部分，用户信息摘取。",
+  "author": {
+    "name": "LostAbaddon",
+    "email": "lostabaddon@gmail.com",
+    "url": "https://lostabaddon.github.io/"
+  },
+  "license": "MIT",
+  "keywords": [
+    "daily-report",
+    "weekly-report",
+    "productivity",
+    "logging",
+    "automation"
+  ],
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/user-prompt-logger.js"
+          }
+        ]
+      }
+    ]
+  }
+}
