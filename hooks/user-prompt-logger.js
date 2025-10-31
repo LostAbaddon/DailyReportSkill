@@ -62,6 +62,7 @@ const readStdin = () => {
     process.stdin.on('error', reject);
   });
 };
+
 // 根据规则生成到 CCCore 的专用 Socket
 const cccoreSocket = (socketName='cccore_socket') => {
   const platform = process.platform;
@@ -73,7 +74,6 @@ const cccoreSocket = (socketName='cccore_socket') => {
     return `/tmp/${socketName}`;
   }
 };
-
 /**
  * 通过 Socket IPC 发送日志到 CCCore
  */

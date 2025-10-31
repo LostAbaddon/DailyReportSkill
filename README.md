@@ -120,6 +120,35 @@ export ACTION_LOGGER_PATH=/your/custom/path
 - 建议定期备份或清理旧日志
 - 可通过环境变量自定义存储路径以符合企业数据治理要求
 
+## CCCore 集成
+
+本插件支持与 CCCore 守护进程集成，提供以下优势：
+
+### 集成优势
+
+- **统一日志管理**：日志通过 CCCore 的内存缓冲和定时刷盘机制，提高性能
+- **自动降级**：当 CCCore 不可用时，自动降级到本地文件存储，保证功能可用性
+- **Socket IPC 通讯**：通过 Unix Socket 与 CCCore 进行高效通讯
+- **日志查询接口**：可通过 CCCore 的 HTTP API 查询日志
+
+### 工作流程
+
+```
+DailyReportSkill Hook
+    ↓
+尝试连接 CCCore Socket IPC (/tmp/cccore_socket 或 \\.\pipe\cccore_socket)
+    ↓
+┌─► 连接成功：发送日志到 CCCore
+│   └─► 缓冲 → 定时刷盘
+│
+└─► 连接失败：降级到本地文件
+    └─► 直接写入 ~/.action-logger/YYYY-MM-DD.log
+```
+
+### 配置 CCCore
+
+详见：[CCCore 项目](https://github.com/lostabaddon/CCCore)
+
 ## 许可证
 
 [MIT](./LICENSE)
@@ -132,11 +161,18 @@ export ACTION_LOGGER_PATH=/your/custom/path
 
 ---
 
+## 相关项目
+
+- **[CCCore](https://github.com/lostabaddon/CCCore)** - Claude Code 核心守护进程系统
+  - DailyReportSkill 与 CCCore 集成，用于统一日志管理和缓冲刷盘
+
+---
+
 ## 版本信息
 
-**版本**：1.0.0
-**最后更新**：2025-10-30
-**功能完整性**：初始版本，核心功能已实现
+**版本**：1.1.0
+**最后更新**：2025-10-31
+**功能完整性**：稳定版本，核心功能已实现，已支持 CCCore 集成
 
 **主要功能**：
 - ✅ 自动捕获用户 Prompt
@@ -144,3 +180,9 @@ export ACTION_LOGGER_PATH=/your/custom/path
 - ✅ 可配置存储路径
 - ✅ Hook 集成（UserPromptSubmit 事件）
 - ✅ 非阻塞后台处理
+- ✅ CCCore 集成支持：支持通过 Socket IPC 与 CCCore 守护进程通讯
+- ✅ 自动降级机制：当 CCCore 不可用时自动降级到本地文件存储
+
+**版本历史**：
+- v1.1.0 (2025-10-31): 添加 CCCore 集成支持，实现与守护进程的通讯，增强系统可扩展性
+- v1.0.0 (2025-10-30): 初始版本，实现自动日志记录和按日期存储的核心功能
