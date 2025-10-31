@@ -10,6 +10,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const os = require('os');
 const net = require('net');
+const { getCurrentTimstampString, readActionHistory, cccoreSocket, formatLogEntry } = require('../lib/utils');
 
 const SocketTimeout = 3000;
 
@@ -19,30 +20,6 @@ if (!ActionLoggerPath) {
 }
 let LoggerFilePath;
 
-// 获取当前时间的 YYYY-MM-DD 格式字符串
-const getCurrentTimstampString = (timestamp, dateOnly=true) => {
-  const now = timestamp ? new Date(timestamp) : new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  if (dateOnly) return `${year}-${month}-${day}`;
-  const hour = String(now.getHours() + 1).padStart(2, '0');
-  const minute = String(now.getMinutes()).padStart(2, '0');
-  const second = String(now.getSeconds()).padStart(2, '0');
-  return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
-};
-// 读取历史
-const readActionHistory = async () => {
-  let content;
-  try {
-    content = await fs.readFile(LoggerFilePath, 'utf-8');
-    content = (content || '').trim();
-  }
-  catch {
-    content = "";
-  }
-  return content;
-};
 // 读取标准输入
 const readStdin = () => {
   return new Promise((resolve, reject) => {
@@ -63,17 +40,6 @@ const readStdin = () => {
   });
 };
 
-// 根据规则生成到 CCCore 的专用 Socket
-const cccoreSocket = (socketName='cccore_socket') => {
-  const platform = process.platform;
-
-  if (platform === 'win32') {
-    return `\\\\.\\pipe\\${socketName}`;
-  }
-  else {
-    return `/tmp/${socketName}`;
-  }
-};
 /**
  * 通过 Socket IPC 发送日志到 CCCore
  */
@@ -104,30 +70,18 @@ const sendToCCCore = (data) => {
       resolve({ ok: false, error: error.message });
     });
 
-    // 5秒超时
     setTimeout(() => {
       socket.destroy();
       resolve({ ok: false, error: 'CCCore 响应超时' });
     }, SocketTimeout);
   });
 };
-
 /**
  * 本地文件写入（降级方案）
  */
 const writeToLocalFile = async (data) => {
-  let history = await readActionHistory();
-
-  const record = `
-============================================================
-| SOURCE   : ${data.source}
-| TIMESTAMP: ${getCurrentTimstampString(data.timestamp, false)}
-| WORKSPACE: ${data.workspace}
-| SESSIONID: ${data.sessionId}
-============================================================
-
-${data.content}
-    `.trim();
+  let history = await readActionHistory(LoggerFilePath);
+  const record = formatLogEntry(data);
   if (history) {
     history = history + '\n\n' + record;
   }

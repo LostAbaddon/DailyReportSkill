@@ -16,6 +16,17 @@
     "automation"
   ],
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/session-start.js"
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "hooks": [
@@ -26,5 +37,11 @@
         ]
       }
     ]
+  },
+  "mcpServers": {
+    "daily-logs": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/logs-server.js"]
+    }
   }
 }

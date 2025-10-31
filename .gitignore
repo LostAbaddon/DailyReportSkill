@@ -29,3 +29,6 @@ Desktop.ini
 
 # Test files (optional - remove if you want to commit test script)
 test-*.js
+
+# Log Files
+logs/

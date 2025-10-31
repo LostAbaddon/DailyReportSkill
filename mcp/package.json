@@ -1,0 +1,9 @@
+{
+  "name": "daily-logs-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for daily logs",
+  "main": "logs-server.js",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.6.0"
+  }
+}
