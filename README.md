@@ -87,7 +87,7 @@ export ACTION_LOGGER_PATH=/your/custom/path
 ============================================================
 | SOURCE   : Claude Code
 | TIMESTAMP: YYYY-MM-DD HH:MM:SS
-| CWD      : /current/working/directory
+| WORKSPACE: /current/working/directory
 | SessionID: {session_id}
 ============================================================
 {user_prompt_content}
