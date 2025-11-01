@@ -12,7 +12,7 @@ const os = require('os');
 const net = require('net');
 const { getCurrentTimstampString, readActionHistory, cccoreSocket, formatLogEntry } = require('../lib/utils');
 
-const SocketTimeout = 3000;
+const SocketTimeout = 500;
 
 let ActionLoggerPath = process.env.ACTION_LOGGER_PATH;
 if (!ActionLoggerPath) {
@@ -111,7 +111,6 @@ const main = async () => {
     // 优先使用 CCCore
     const ccCoreResult = await sendToCCCore(data);
     if (ccCoreResult.ok) return process.exit(0);
-    throw new Error(ccCoreResult.error);
 
     // CCCore 不可用，降级到本地文件
     await writeToLocalFile(data);
