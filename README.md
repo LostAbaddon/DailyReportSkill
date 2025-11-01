@@ -163,14 +163,14 @@ DailyReportSkill Hook
 
 ## 相关项目
 
-- **[CCCore](https://github.com/lostabaddon/CCCore)** - Claude Code 核心守护进程系统
-  - DailyReportSkill 与 CCCore 集成，用于统一日志管理和缓冲刷盘
+- **[CCCore](https://github.com/lostabaddon/CCCore)**: Claude Code 核心守护进程系统
+  + DailyReportSkill 与 CCCore 集成，用于统一日志管理和缓冲刷盘
 
 ---
 
 ## 版本信息
 
-**版本**：1.1.0
+**版本**：1.1.1
 **最后更新**：2025-10-31
 **功能完整性**：稳定版本，核心功能已实现，已支持 CCCore 集成
 

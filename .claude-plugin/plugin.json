@@ -1,6 +1,6 @@
 {
-  "name": "daily-report",
-  "version": "1.0.0",
+  "name": "workReport",
+  "version": "1.1.1",
   "description": "自动记录用户活动，并能根据用户活动生成日报周报。同时也是 CCCore 的 Plugin 部分，用户信息摘取。",
   "author": {
     "name": "LostAbaddon",
@@ -38,6 +38,7 @@
       }
     ]
   },
+  "commands": ["./commands/get.md", "./commands/report.md"],
   "mcpServers": {
     "daily-logs": {
       "command": "node",
